@@ -4,18 +4,28 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Map;
 
+
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.neo4j.driver.Driver;
 
+import java.util.List;
+import org.neo4j.driver.Result;
+import org.neo4j.driver.Session;
+import org.neo4j.driver.Transaction;
+import org.neo4j.driver.TransactionWork;
+
+import static org.neo4j.driver.Values.parameters;
+
 import javax.inject.Inject;
 
 public class ReqHandler implements HttpHandler {
 
+    private String name;
     private String ID;
-    private Map getResponse;
+    private String addResponse;
 
     // TODO Complete This Class
     private Driver neo4jDriver;
@@ -30,7 +40,7 @@ public class ReqHandler implements HttpHandler {
     public void handle(HttpExchange exchange) throws IOException {
         try {
             if (exchange.getRequestMethod().equals("PUT")) {
-//                handlePut(exchange);
+                handlePut(exchange);
             }
             else if(exchange.getRequestMethod().equals("GET")){
 //                handleGet(exchange);
@@ -43,46 +53,28 @@ public class ReqHandler implements HttpHandler {
         }
     }
 
-//    private void handleGet(HttpExchange r) throws IOException{
-//        String body = Utils.convert(r.getRequestBody());
-//        try {
-//            JSONObject deserialized = new JSONObject(body);
-//
-//            //See body and deserilized
-//            System.out.println("addActor-HandelGet get input:");
-//            System.out.println(deserialized);
-//
-//            //If actorID is not given return 400 as BAD REQUEST
-//            if (!deserialized.has("request_name")) {
-//                r.sendResponseHeaders(400, -1);
-//            }
-//            else {
-//                ID = deserialized.getString("request_name");
-//                //Interaction with database + assign values to JSONObjects already
-//                get(ID);
-//                JSONObject responseJSON = new JSONObject(getResponse);
-//                byte[] result = responseJSON.toString().getBytes();
-//                OutputStream os = r.getResponseBody();
-//                //valid actorID passed in and valid result responded by database
-//                if (responseJSON.length() != 0) {
-//                    result = responseJSON.toString().getBytes();
-//                    r.sendResponseHeaders(200, result.length);
-//                    os.write(result);
-//                }
-//                //actorID not found in the database and 404 return as NO DATA FOUND
-//                else{
-//                    r.sendResponseHeaders(404, -1);
-//                }
-//                os.close();
-//            }
-//        }
-//        //if deserilized failed, (ex: JSONObeject Null Value)
-//        catch(JSONException e) {
-//            r.sendResponseHeaders(400, -1);
-//        }
-//        //if server connection / database connection failed
-//        catch(Exception e) {
-//            r.sendResponseHeaders(500, -1);
-//        }
-//    }
+
+
+    private void handlePut(HttpExchange r) throws IOException {
+            String request =  r.getRequestURI().toString().substring(r.getRequestURI().toString().lastIndexOf('/')+1);
+            System.out.println(request);
+            if(request.equals("addActor")){
+                addActor Add_actor =  new addActor(this.neo4jDriver);
+                 Add_actor.putaddActor(r);
+            }
+            else if(request.equals("addMovie")){
+
+                addMovie ADD_movie = new addMovie(this.neo4jDriver);
+                ADD_movie.putaddMovie(r);
+
+            }
+            else if(request.equals("addRelationship")){
+                addRelationship ADD_Relationship = new addRelationship(this.neo4jDriver);
+                ADD_Relationship.putaddRelationship(r);
+            }
+
+    }
 }
+
+
+
