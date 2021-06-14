@@ -43,7 +43,7 @@ public class ReqHandler implements HttpHandler {
                 handlePut(exchange);
             }
             else if(exchange.getRequestMethod().equals("GET")){
-//                handleGet(exchange);
+                handleGet(exchange);
             }
             else{
                 exchange.sendResponseHeaders(405, -1);
@@ -51,6 +51,27 @@ public class ReqHandler implements HttpHandler {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    private void handleGet(HttpExchange r) throws IOException {
+        String request =  r.getRequestURI().toString().substring(r.getRequestURI().toString().lastIndexOf('/')+1);
+        System.out.println(request);
+        if(request.equals("getActor")){
+            getActor GET_actor =  new getActor(this.neo4jDriver);
+            GET_actor.run(r);
+        }
+        else if(request.equals("hasRelationship")){
+//            addRelationship ADD_Relationship = new addRelationship(this.neo4jDriver);
+//            ADD_Relationship.putaddRelationship(r);
+        }
+        else if(request.equals("computeBaconNumber")){
+//            addRelationship ADD_Relationship = new addRelationship(this.neo4jDriver);
+//            ADD_Relationship.putaddRelationship(r);
+        }
+        else if(request.equals("computeBaconPath")){
+//            addRelationship ADD_Relationship = new addRelationship(this.neo4jDriver);
+//            ADD_Relationship.putaddRelationship(r);
+        }
+
     }
 
 
