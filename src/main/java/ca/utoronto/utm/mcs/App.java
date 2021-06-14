@@ -18,9 +18,10 @@ public class App
        ReqHandler handler = component1.buildHandler();
 
         // TODO Create Your Server Context Here, There Should Only Be One Context
-         main_server.createContext("api/v1",handler);
-
+         main_server.createContext("/api/v1/",handler);
+  main_server.start();
 
     	System.out.printf("Server started on port %d\n", port);
+//        System.exit(0);
     }
 }
