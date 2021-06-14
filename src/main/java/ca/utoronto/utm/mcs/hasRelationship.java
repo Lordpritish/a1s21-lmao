@@ -10,7 +10,6 @@ import org.json.JSONObject;
 
 import org.neo4j.driver.Session;
 
-import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Map;
 

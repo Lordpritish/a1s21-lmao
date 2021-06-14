@@ -129,6 +129,45 @@ public class Neo4jDAO implements AutoCloseable{
             }
         });
     }
+    public static Boolean actorIDExist (Session session,String actorID){
+        return session.writeTransaction( new TransactionWork<Boolean>() {
+            @Override
+            public Boolean execute(Transaction tx) {
+                System.out.println(actorID);
+                Result result = tx.run(  "MATCH (a:Actor{actorID:$actorID}) " +
+                                "RETURN a.actorID as actorID",
+                        parameters("actorID", actorID));
+
+                List<Record> records = result.list();
+                System.out.println(records.isEmpty());
+                return records.isEmpty();
+            }
+        });
+    }
+
+
+    public static Map computeBaconNumber (Session session,String actorID,String baconID){
+        return session.writeTransaction( new TransactionWork<Map>() {
+            @Override
+            public Map execute(Transaction tx) {
+                System.out.println(actorID);
+                System.out.println(baconID);
+                Result result = tx.run( "MATCH p=shortestPath((a:Actor{actorID:$actorID})-[*]-" +
+                                "(b:Actor{actorID:$baconID})) " +
+                                "RETURN length(p)/2 as baconNumber",
+                        parameters("actorID", actorID, "baconID", baconID));
+
+                List<Record> records = result.list();
+                Map recordMap = new HashMap();
+                //valid data responded from database
+                if (!records.isEmpty()){
+                    Record record = records.get(0);
+                    recordMap = record.asMap();
+                }
+                return recordMap;
+            }
+        });
+    }
 
 
 
