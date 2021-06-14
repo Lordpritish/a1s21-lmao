@@ -35,7 +35,6 @@ public class ReqHandler implements HttpHandler {
     }
 
 
-
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         try {
@@ -69,13 +68,11 @@ public class ReqHandler implements HttpHandler {
             GET_computeBaconNumber.run(r);
         }
         else if(request.equals("computeBaconPath")){
-//            addRelationship ADD_Relationship = new addRelationship(this.neo4jDriver);
-//            ADD_Relationship.putaddRelationship(r);
+            computeBaconPath GET_computeBaconPath= new computeBaconPath(this.neo4jDriver);
+            GET_computeBaconPath.run(r);
         }
 
     }
-
-
 
     private void handlePut(HttpExchange r) throws IOException {
             String request =  r.getRequestURI().toString().substring(r.getRequestURI().toString().lastIndexOf('/')+1);

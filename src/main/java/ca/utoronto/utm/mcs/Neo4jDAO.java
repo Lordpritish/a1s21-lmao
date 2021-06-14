@@ -1,7 +1,6 @@
 package ca.utoronto.utm.mcs;
-import org.neo4j.driver.AuthTokens;
+
 import org.neo4j.driver.Driver;
-import org.neo4j.driver.GraphDatabase;
 import org.neo4j.driver.Record;
 import org.neo4j.driver.Result;
 import org.neo4j.driver.Session;
@@ -42,12 +41,7 @@ public class Neo4jDAO implements AutoCloseable{
                     Result result = tx.run( "MERGE (a:Actor{name:$name,actorID:$actorID}) "  +
                                     "RETURN a.name, a.actorID",
                             parameters("name", name , "actorID", ID));
-//                    Result result = tx.run( "MERGE (a:Actor{actorID:$actorID}) "  +
-//                                    "SET a.name = $name" +
-//                                    "RETURN a.name, a.actorID",
-//               List<Record> records = result.list();
-//                    Record record = records.get(0);
-//                    Map recordMap = record.asMap();
+
                     return result.single().get( 0 ).asString();
                 }
             });
@@ -90,7 +84,7 @@ public class Neo4jDAO implements AutoCloseable{
         return session.writeTransaction( new TransactionWork<Map>() {
             @Override
             public Map execute(Transaction tx) {
-                System.out.println(actorID);
+//                System.out.println(actorID);
                 Result result = tx.run( "MATCH (a:Actor{actorID:$actorID})-" +
                                 "[ACTED_IN]->(m:Movie) " +
                                 "RETURN a.actorID as actorID, a.name as name, collect(m.movieID) as movies",
@@ -111,8 +105,8 @@ public class Neo4jDAO implements AutoCloseable{
         return session.writeTransaction( new TransactionWork<Map>() {
             @Override
             public Map execute(Transaction tx) {
-                System.out.println(actorID);
-                System.out.println(movieID);
+//                System.out.println(actorID);
+//                System.out.println(movieID);
                 Result result = tx.run( "match (a:Actor{actorID:$actorID}), " +
                                 "(m:Movie{movieID:$movieID})" +
                                 "RETURN a.actorID, m.movieID, exists((a)-[:ACTED_IN]->(m)) as b",
@@ -133,13 +127,12 @@ public class Neo4jDAO implements AutoCloseable{
         return session.writeTransaction( new TransactionWork<Boolean>() {
             @Override
             public Boolean execute(Transaction tx) {
-                System.out.println(actorID);
+//                System.out.println(actorID);
                 Result result = tx.run(  "MATCH (a:Actor{actorID:$actorID}) " +
                                 "RETURN a.actorID as actorID",
                         parameters("actorID", actorID));
 
                 List<Record> records = result.list();
-                System.out.println(records.isEmpty());
                 return records.isEmpty();
             }
         });
@@ -150,13 +143,40 @@ public class Neo4jDAO implements AutoCloseable{
         return session.writeTransaction( new TransactionWork<Map>() {
             @Override
             public Map execute(Transaction tx) {
-                System.out.println(actorID);
-                System.out.println(baconID);
+//                System.out.println(actorID);
+//                System.out.println(baconID);
                 Result result = tx.run( "MATCH p=shortestPath((a:Actor{actorID:$actorID})-[*]-" +
                                 "(b:Actor{actorID:$baconID})) " +
                                 "RETURN length(p)/2 as baconNumber",
                         parameters("actorID", actorID, "baconID", baconID));
 
+                List<Record> records = result.list();
+                Map recordMap = new HashMap();
+                //valid data responded from database
+                if (!records.isEmpty()){
+                    Record record = records.get(0);
+                    recordMap = record.asMap();
+                }
+                return recordMap;
+            }
+        });
+    }
+
+    public static Map computeBaconPath (Session session,String actorID,String baconID){
+        return session.writeTransaction( new TransactionWork<Map>() {
+            @Override
+            public Map execute(Transaction tx) {
+//                System.out.println("here "+actorID);
+//                System.out.println("here1" + baconID);
+                Result result = tx.run( "MATCH p=shortestPath((a:Actor{actorID:$actorID})-[*]-" +
+                                "(b:Actor{actorID:$baconID})) " +
+                                "RETURN  p as baconPath",
+                        parameters("actorID", actorID, "baconID", baconID));
+//                Result result = tx.run( "MATCH (a:Actor{actorID:$actorID}),"+
+//                                "(b:Actor{actorID:$baconID}) " +
+//                        "p = shortestPath((a)-[*]-(b))" +
+//                                "RETURN  p as baconPath",
+//                        parameters("actorID", actorID, "baconID", baconID));
                 List<Record> records = result.list();
                 Map recordMap = new HashMap();
                 //valid data responded from database
