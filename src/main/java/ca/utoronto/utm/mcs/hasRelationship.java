@@ -26,8 +26,8 @@ public class hasRelationship {
             JSONObject deserialized = new JSONObject(body);
 
             //See body and deserilized
-            System.out.println("addActor-HandelGet get input:");
-            System.out.println(deserialized);
+//            System.out.println("hasRelationhshi[ get input:");
+//            System.out.println(deserialized);
             //If actorID is not given return 400 as BAD REQUEST
             if (!deserialized.has("actorID") || !deserialized.has("movieID")) {
                 r.sendResponseHeaders(400, -1);
@@ -35,6 +35,7 @@ public class hasRelationship {
             else {
                 String actorID = deserialized.getString("actorID");
                 String movieID = deserialized.getString("movieID");
+
                 Map response;
                 //Interaction with database + assign values to JSONObjects already
                 try ( Session session = neo4jDriver.session() )
@@ -46,7 +47,7 @@ public class hasRelationship {
                 byte[] result = responseJSON.toString().getBytes();
                 OutputStream os = r.getResponseBody();
                 //valid actorID passed in and valid result responded by database
-                System.out.println(responseJSON);
+                System.out.println("has response" + responseJSON);
                 if (responseJSON.length() != 0) {
                     result = responseJSON.toString().getBytes();
                     r.sendResponseHeaders(200, result.length);

@@ -31,8 +31,8 @@ public class computeBaconNumber {
             OutputStream os = r.getResponseBody();
             JSONObject responseJSON;
 
-            System.out.println("getRelationship handler get:");
-            System.out.println(deserialized);
+//            System.out.println("getRelationship handler get:");
+//            System.out.println(deserialized);
             //If actorID is not given return 400 as BAD REQUEST
             if (!deserialized.has("actorID")){
                 r.sendResponseHeaders(400, -1);
