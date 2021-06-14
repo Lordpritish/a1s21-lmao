@@ -38,8 +38,8 @@ public class Neo4jDAO implements AutoCloseable{
             return session.writeTransaction( new TransactionWork<String>() {
                 @Override
                 public String execute(Transaction tx) {
-                    Result result = tx.run( "MERGE (a:Actor{name:$name,actorID:$actorID}) "  +
-                                    "RETURN a.name, a.actorID",
+                    Result result = tx.run( "MERGE (a:actor{Name:$name,id:$actorID}) "  +
+                                    "RETURN a.Name, a.id",
                             parameters("name", name , "actorID", ID));
 
                     return result.single().get( 0 ).asString();
@@ -51,12 +51,11 @@ public class Neo4jDAO implements AutoCloseable{
         return session.writeTransaction( new TransactionWork<String>() {
             @Override
             public String execute(Transaction tx) {
-                Result result = tx.run( "MERGE (m:Movie{movieID:$movieID}) "  +
-                                "SET m.name = $name " +
-                                "RETURN m.name, m.movieID",
+                Result result = tx.run( "MERGE (m:movie{id:$movieID}) "  +
+                                "SET m.Name = $name " +
+                                "RETURN m.Name, m.id",
                         parameters("name", name , "movieID", ID));
 
-                System.out.println("here9");
 
 
                 return result.single().get( 0 ).asString();
@@ -67,15 +66,34 @@ public class Neo4jDAO implements AutoCloseable{
         return session.writeTransaction( new TransactionWork<String>() {
             @Override
             public String execute(Transaction tx) {
-                Result result = tx.run( "MATCH (a: Actor), (m: Movie)" +
-               " WHERE a.actorID = $actorID AND m.movieID = $movieID" +
+                Result result = tx.run( "MATCH (a: actor), (m: movie)" +
+               " WHERE a.id = $actorID AND m.id = $movieID" +
                " CREATE (a)-[r:ACTED_IN]->(m) "+
                        " RETURN type(r)",
                         parameters("actorID",actorID , "movieID", movieID));
 
-                System.out.println("here9");
 
                 return result.single().get( 0 ).asString();
+            }
+        });
+    }
+    public static Map getActorNameandID (Session session,String actorID){
+        return session.writeTransaction( new TransactionWork<Map>() {
+            @Override
+            public Map execute(Transaction tx) {
+
+                Result result = tx.run( "match  (a:actor{id:$actorID})" +
+                                "RETURN a.id as actorID, a.Name as name, [] as movies",
+                        parameters("actorID", actorID));
+
+                List<Record> records = result.list();
+                Map recordMap = new HashMap();
+                //valid data responded from database
+                if (!records.isEmpty()){
+                    Record record = records.get(0);
+                    recordMap = record.asMap();
+                }
+                return recordMap;
             }
         });
     }
@@ -85,9 +103,9 @@ public class Neo4jDAO implements AutoCloseable{
             @Override
             public Map execute(Transaction tx) {
 //                System.out.println(actorID);
-                Result result = tx.run( "MATCH (a:Actor{actorID:$actorID})-" +
-                                "[ACTED_IN]->(m:Movie) " +
-                                "RETURN a.actorID as actorID, a.name as name, collect(m.movieID) as movies",
+                Result result = tx.run( "MATCH (a:actor{id:$actorID})-" +
+                                "[ACTED_IN]->(m:movie) " +
+                                "RETURN a.id as actorID, a.Name as name, collect(m.id) as movies",
                         parameters("actorID", actorID));
 
                List<Record> records = result.list();
@@ -105,11 +123,11 @@ public class Neo4jDAO implements AutoCloseable{
         return session.writeTransaction( new TransactionWork<Map>() {
             @Override
             public Map execute(Transaction tx) {
-//                System.out.println(actorID);
-//                System.out.println(movieID);
-                Result result = tx.run( "match (a:Actor{actorID:$actorID}), " +
-                                "(m:Movie{movieID:$movieID})" +
-                                "RETURN a.actorID, m.movieID, exists((a)-[:ACTED_IN]->(m)) as b",
+                System.out.println(actorID);
+                System.out.println(movieID);
+                Result result = tx.run( "MATCH (a:actor{id:$actorID}), " +
+                                "(m:movie{id:$movieID})" +
+                                "RETURN a.id as actorID, m.id as movieID, exists((a)-[:ACTED_IN]->(m)) as hasRelationship",
                         parameters("actorID", actorID, "movieID", movieID));
 
                 List<Record> records = result.list();
@@ -119,6 +137,7 @@ public class Neo4jDAO implements AutoCloseable{
                     Record record = records.get(0);
                     recordMap = record.asMap();
                 }
+//
                 return recordMap;
             }
         });
@@ -128,10 +147,23 @@ public class Neo4jDAO implements AutoCloseable{
             @Override
             public Boolean execute(Transaction tx) {
 //                System.out.println(actorID);
-                Result result = tx.run(  "MATCH (a:Actor{actorID:$actorID}) " +
-                                "RETURN a.actorID as actorID",
+                Result result = tx.run(  "MATCH (a:actor{id:$actorID}) " +
+                                "RETURN a.id as actorID",
                         parameters("actorID", actorID));
 
+                List<Record> records = result.list();
+                return records.isEmpty();
+            }
+        });
+    }
+    public static Boolean movieIDExist (Session session,String movieID){
+        return session.writeTransaction( new TransactionWork<Boolean>() {
+            @Override
+            public Boolean execute(Transaction tx) {
+//                System.out.println(actorID);
+                Result result = tx.run(  "MATCH (m:movie{id:$movieID}) " +
+                                "RETURN m.id as movieID",
+                        parameters("movieID", movieID));
                 List<Record> records = result.list();
                 return records.isEmpty();
             }
@@ -143,10 +175,10 @@ public class Neo4jDAO implements AutoCloseable{
         return session.writeTransaction( new TransactionWork<Map>() {
             @Override
             public Map execute(Transaction tx) {
-//                System.out.println(actorID);
-//                System.out.println(baconID);
-                Result result = tx.run( "MATCH p=shortestPath((a:Actor{actorID:$actorID})-[*]-" +
-                                "(b:Actor{actorID:$baconID})) " +
+                System.out.println(actorID);
+                System.out.println(baconID);
+                Result result = tx.run( "MATCH p=shortestPath((a:actor{id:$actorID})-[*]-" +
+                                "(b:actor{id:$baconID})) " +
                                 "RETURN length(p)/2 as baconNumber",
                         parameters("actorID", actorID, "baconID", baconID));
 
@@ -168,8 +200,8 @@ public class Neo4jDAO implements AutoCloseable{
             public Map execute(Transaction tx) {
 //                System.out.println("here "+actorID);
 //                System.out.println("here1" + baconID);
-                Result result = tx.run( "MATCH p=shortestPath((a:Actor{actorID:$actorID})-[*]-" +
-                                "(b:Actor{actorID:$baconID})) " +
+                Result result = tx.run( "MATCH p=shortestPath((a:actor{id:$actorID})-[*]-" +
+                                "(b:actor{id:$baconID})) " +
                                 "RETURN  p as baconPath",
                         parameters("actorID", actorID, "baconID", baconID));
 //                Result result = tx.run( "MATCH (a:Actor{actorID:$actorID}),"+

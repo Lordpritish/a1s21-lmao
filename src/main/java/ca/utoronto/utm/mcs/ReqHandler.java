@@ -71,6 +71,10 @@ public class ReqHandler implements HttpHandler {
             computeBaconPath GET_computeBaconPath= new computeBaconPath(this.neo4jDriver);
             GET_computeBaconPath.run(r);
         }
+        else
+        {
+            r.sendResponseHeaders(404,-1);
+        }
 
     }
 
@@ -90,6 +94,10 @@ public class ReqHandler implements HttpHandler {
             else if(request.equals("addRelationship")){
                 addRelationship ADD_Relationship = new addRelationship(this.neo4jDriver);
                 ADD_Relationship.putaddRelationship(r);
+            }
+            else
+            {
+                r.sendResponseHeaders(404,-1);
             }
 
     }

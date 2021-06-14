@@ -8,6 +8,7 @@ import org.neo4j.driver.Session;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Map;
 
 public class addRelationship {
 
@@ -30,16 +31,46 @@ public class addRelationship {
                 String actorID = deserialized.getString("actorID");
                 String movieID = deserialized.getString("movieID");
                 String response;
-                //interaction with database
 
-                try ( Session session = neo4jDriver.session() )
+                actorIDEXIST check=  new actorIDEXIST(this.neo4jDriver);
+                movieIDEXIST check2=  new movieIDEXIST(this.neo4jDriver);
+
+
+
+                Boolean actor_NOT_Exist = check.run(r,actorID);
+                Boolean movie_NOT_Exist = check2.run(movieID);
+
+                //neither movie or actor is not existed in the database
+                //responded 404 as NO ACTOR EXIST
+                if ((actor_NOT_Exist) || (movie_NOT_Exist)){
+                    r.sendResponseHeaders(404,-1);
+                }else
                 {
-                    response = Neo4jDAO.addRelationship(session,actorID,movieID);
+                    Map response2;
+                    System.out.println("here1");
+                    try ( Session session = neo4jDriver.session() )
+                    {
+                        response2 = Neo4jDAO.hasRelationship(session,actorID,movieID);
+                    }
+                    System.out.println("here2");
+                    //RELATIONSHIP ALREADY EXIST
+                    if(response2.get("hasRelationship").toString().equals("true")){
+                        System.out.println("RELATIONSHIP ALREADY EXIST");
+                        r.sendResponseHeaders(400, -1);
+                    }
+                    else {
+                        System.out.println("RELATIONSHIP add");
+                        try ( Session session = neo4jDriver.session() )
+                        {
+                            response = Neo4jDAO.addRelationship(session,actorID,movieID);
+                        }
+
+                        r.sendResponseHeaders(200, 0);
+                        OutputStream os = r.getResponseBody();
+                        os.close();
+                    }
                 }
 
-                r.sendResponseHeaders(200, 0);
-                OutputStream os = r.getResponseBody();
-                os.close();
             }
         }
         //if deserilized failed, (ex: JSONObeject Null Value)
