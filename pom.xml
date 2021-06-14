@@ -65,6 +65,7 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 				</executions>
 				<configuration>
 					<mainClass>ca.utoronto.utm.mcs.App</mainClass>
+<!--					<cleanupDaemonThreads>false</cleanupDaemonThreads>-->
 				</configuration>
 			</plugin>
 			<plugin>
