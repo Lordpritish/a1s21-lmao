@@ -65,8 +65,8 @@ public class ReqHandler implements HttpHandler {
         }
         else if(request.equals("computeBaconNumber")){
 
-//            addRelationship ADD_Relationship = new addRelationship(this.neo4jDriver);
-//            ADD_Relationship.putaddRelationship(r);
+            computeBaconNumber  GET_computeBaconNumber = new computeBaconNumber (this.neo4jDriver);
+            GET_computeBaconNumber.run(r);
         }
         else if(request.equals("computeBaconPath")){
 //            addRelationship ADD_Relationship = new addRelationship(this.neo4jDriver);
