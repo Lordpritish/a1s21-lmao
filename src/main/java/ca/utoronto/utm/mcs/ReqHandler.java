@@ -60,10 +60,11 @@ public class ReqHandler implements HttpHandler {
             GET_actor.run(r);
         }
         else if(request.equals("hasRelationship")){
-//            addRelationship ADD_Relationship = new addRelationship(this.neo4jDriver);
-//            ADD_Relationship.putaddRelationship(r);
+            hasRelationship GET_Relationship=  new hasRelationship(this.neo4jDriver);
+            GET_Relationship.run(r);
         }
         else if(request.equals("computeBaconNumber")){
+
 //            addRelationship ADD_Relationship = new addRelationship(this.neo4jDriver);
 //            ADD_Relationship.putaddRelationship(r);
         }

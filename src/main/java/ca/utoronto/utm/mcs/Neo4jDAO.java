@@ -14,7 +14,7 @@ import java.util.Map;
 
 import static org.neo4j.driver.Values.parameters;
 
-// All your database transactions or queries should 
+// All your database transactions or queries should
 // go in this class
 public class Neo4jDAO implements AutoCloseable{
     // TODO Complete This Class
@@ -97,6 +97,28 @@ public class Neo4jDAO implements AutoCloseable{
                         parameters("actorID", actorID));
 
                List<Record> records = result.list();
+                Map recordMap = new HashMap();
+                //valid data responded from database
+                if (!records.isEmpty()){
+                    Record record = records.get(0);
+                    recordMap = record.asMap();
+                }
+                return recordMap;
+            }
+        });
+    }
+    public static Map hasRelationship (Session session,String actorID,String movieID){
+        return session.writeTransaction( new TransactionWork<Map>() {
+            @Override
+            public Map execute(Transaction tx) {
+                System.out.println(actorID);
+                System.out.println(movieID);
+                Result result = tx.run( "match (a:Actor{actorID:$actorID}), " +
+                                "(m:Movie{movieID:$movieID})" +
+                                "RETURN a.actorID, m.movieID, exists((a)-[:ACTED_IN]->(m)) as b",
+                        parameters("actorID", actorID, "movieID", movieID));
+
+                List<Record> records = result.list();
                 Map recordMap = new HashMap();
                 //valid data responded from database
                 if (!records.isEmpty()){
