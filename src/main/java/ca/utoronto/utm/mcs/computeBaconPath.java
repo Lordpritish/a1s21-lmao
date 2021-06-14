@@ -73,7 +73,7 @@ public class computeBaconPath {
                     }
                     //actorID given is the same as actorID for Kevin Bacon
                     else {
-                        responseJSON.put("baconPath", "[]");
+                        responseJSON.put("baconPath", actorID);
                     }
                     //valid actorID passed in and valid result responded by database
                     if (responseJSON.length() != 0) {
@@ -110,8 +110,8 @@ public class computeBaconPath {
         ) {
             Map nodeMap = node.asMap();
             String actorID ;
-            if (node.hasLabel("Actor")){
-                actorID = nodeMap.get("actorID").toString();
+            if (node.hasLabel("actor")){
+                actorID = nodeMap.get("id").toString();
                 al.add(actorID);
             }
         }

@@ -33,19 +33,32 @@ public class addMovie {
                 r.sendResponseHeaders(400, -1);
             }
             else {
-                String name = deserialized.getString("name");
-                String ID = deserialized.getString("movieID");
-                String response;
-                //interaction with database
 
-                try ( Session session = neo4jDriver.session() )
+                String name = deserialized.getString("name");
+                String movieID = deserialized.getString("movieID");
+
+                movieIDEXIST check=  new movieIDEXIST(this.neo4jDriver);
+                Boolean movie_NOT_Exist = check.run(movieID);
+                if (!movie_NOT_Exist){
+                    System.out.println("Duplicate already exist");
+                    r.sendResponseHeaders(400,-1);
+                }
+                else
                 {
-                    response = Neo4jDAO.addMovie(session,name,ID);
+                    String response;
+                    //interaction with database
+                    try ( Session session = neo4jDriver.session() )
+                    {
+                        response = Neo4jDAO.addMovie(session,name,movieID);
+                    }
+
+                    r.sendResponseHeaders(200, 0);
+                    OutputStream os = r.getResponseBody();
+                    os.close();
+
                 }
 
-                r.sendResponseHeaders(200, 0);
-                OutputStream os = r.getResponseBody();
-                os.close();
+
             }
         }
         //if deserilized failed, (ex: JSONObeject Null Value)
