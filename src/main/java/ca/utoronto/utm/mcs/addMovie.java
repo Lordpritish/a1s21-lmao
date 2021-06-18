@@ -14,6 +14,16 @@ import java.io.OutputStream;
 
 import java.io.IOException;
 
+/**
+ * PUT /api/v1/actorIDEXIST
+ * @param:
+ * @return:
+ * - 200 OK: Actor exist
+ * - 400 BAD REQUEST: If name/actorid are improperly formatted
+ * - 500 INTERNAL SERVER ERROR: if error occured during a database operation
+ */
+
+
 public class addMovie {
 
     private Driver neo4jDriver;
