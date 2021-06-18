@@ -80,7 +80,6 @@ public class ReqHandler implements HttpHandler {
 
     private void handlePut(HttpExchange r) throws IOException {
             String request =  r.getRequestURI().toString().substring(r.getRequestURI().toString().lastIndexOf('/')+1);
-            System.out.println(request);
             if(request.equals("addActor")){
                 addActor Add_actor =  new addActor(this.neo4jDriver);
                  Add_actor.putaddActor(r);

@@ -31,11 +31,11 @@ public class addActor {
             else {
                 String name = deserialized.getString("name");
                 String actorID = deserialized.getString("actorID");
-
+//
                 actorIDEXIST check=  new actorIDEXIST(this.neo4jDriver);
                 Boolean actor_NOT_Exist = check.run(r,actorID);
                 if (!actor_NOT_Exist){
-                    System.out.println("Duplicate already exist");
+//                    System.out.println("Duplicate already exist");
                     r.sendResponseHeaders(400,-1);
                 }
                 else
@@ -57,12 +57,12 @@ public class addActor {
         }
         //if deserilized failed, (ex: JSONObeject Null Value)
         catch(JSONException e) {
-            System.out.println("here6");
+//            System.out.println("here6");
             r.sendResponseHeaders(400, -1);
         }
         //if server connection / database connection failed
         catch(Exception e) {
-            System.out.println("here8");
+//            System.out.println("here8");
             r.sendResponseHeaders(500, -1);
         }
 
