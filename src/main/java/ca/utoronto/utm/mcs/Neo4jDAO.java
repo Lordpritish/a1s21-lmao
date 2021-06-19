@@ -13,6 +13,16 @@ import java.util.Map;
 
 import static org.neo4j.driver.Values.parameters;
 
+/**
+ * PUT /api/v1/actorIDEXIST
+ * @param:
+ * @return:
+ * - 200 OK: Actor exist
+ * - 400 BAD REQUEST: If name/actorid are improperly formatted
+ * - 500 INTERNAL SERVER ERROR: if error occured during a database operation
+ */
+
+
 // All your database transactions or queries should
 // go in this class
 public class Neo4jDAO implements AutoCloseable{
