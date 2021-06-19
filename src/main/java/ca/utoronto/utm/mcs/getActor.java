@@ -15,12 +15,16 @@ import java.io.OutputStream;
 import java.util.Map;
 
 /**
- * PUT /api/v1/actorIDEXIST
- * @param:
+ * GET /api/v1/getActor
+ * @param: actorId: String
  * @return:
- * - 200 OK: Actor exist
- * - 400 BAD REQUEST: If name/actorid are improperly formatted
- * - 500 INTERNAL SERVER ERROR: if error occured during a database operation
+    * 200 OK - For a successful add
+    * 400 BAD REQUEST - If the request body is improperly formatted or
+    missing required information
+    * 404 NOT FOUND - If there is no actor in the database that exists with that
+    actorId.
+    * 500 INTERNAL SERVER ERROR - If save or add was unsuccessful (Java
+    Exception Thrown)
  */
 
 

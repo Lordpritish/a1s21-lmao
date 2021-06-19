@@ -6,12 +6,10 @@ import java.io.IOException;
 import org.neo4j.driver.Session;
 
 /**
- * PUT /api/v1/actorIDEXIST
+ * PUT /api/v1movieIDEXIST
  * @param:
  * @return:
- * - 200 OK: Actor exist
- * - 400 BAD REQUEST: If name/actorid are improperly formatted
- * - 500 INTERNAL SERVER ERROR: if error occured during a database operation
+ * - true if movieID exist in data base return false otherwise true
  */
 
 

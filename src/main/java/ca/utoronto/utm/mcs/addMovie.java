@@ -15,14 +15,13 @@ import java.io.OutputStream;
 import java.io.IOException;
 
 /**
- * PUT /api/v1/actorIDEXIST
- * @param:
+ * PUT /api/v1/addMovie
+ * @param: name: String , movieId: String
  * @return:
- * - 200 OK: Actor exist
- * - 400 BAD REQUEST: If name/actorid are improperly formatted
- * - 500 INTERNAL SERVER ERROR: if error occured during a database operation
- */
-
+ * 200 OK - For a successful add
+ * 400 BAD REQUEST - If the request body is improperly formatted or missing required information
+ * 500 INTERNAL SERVER ERROR - If save or add was unsuccessful (Java Exception Thrown)
+ **/
 
 public class addMovie {
 
