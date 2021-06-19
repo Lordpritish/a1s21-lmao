@@ -6,7 +6,7 @@ import java.io.IOException;
 import org.neo4j.driver.Session;
 
 /**
- * PUT /api/v1movieIDEXIST
+ *
  * @param:
  * @return:
  * - true if movieID exist in data base return false otherwise true
