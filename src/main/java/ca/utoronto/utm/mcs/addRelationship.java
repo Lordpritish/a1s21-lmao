@@ -34,7 +34,7 @@ public class addRelationship {
 
             //If either movieID or name is not given return 400 as BAD REQUEST
             if (!deserialized.has("actorID") || !deserialized.has("movieID") ||
-                    (!deserialized.get("actorID").getClass().equals(String.class)) && !deserialized.get("movieID").getClass().equals(String.class)) {
+                    (!deserialized.get("actorID").getClass().equals(String.class)) || !deserialized.get("movieID").getClass().equals(String.class)) {
                 r.sendResponseHeaders(400, -1);
             }
             else {

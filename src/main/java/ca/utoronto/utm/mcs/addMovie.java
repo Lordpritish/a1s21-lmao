@@ -39,7 +39,7 @@ public class addMovie {
 
             //If either movieID or name is not given return 400 as BAD REQUEST
             if (!deserialized.has("name") || !deserialized.has("movieID") ||
-                    (!deserialized.get("name").getClass().equals(String.class)) && !deserialized.get("movieID").getClass().equals(String.class)) {
+                    (!deserialized.get("name").getClass().equals(String.class)) || !deserialized.get("movieID").getClass().equals(String.class)) {
                 r.sendResponseHeaders(400, -1);
             }
             else {

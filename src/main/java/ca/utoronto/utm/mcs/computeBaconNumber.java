@@ -43,7 +43,7 @@ public class computeBaconNumber {
 //            System.out.println("getRelationship handler get:");
 //            System.out.println(deserialized);
             //If actorID is not given return 400 as BAD REQUEST
-            if (!deserialized.has("actorID")){
+            if (!deserialized.has("actorID") || !deserialized.get("actorID").getClass().equals(String.class) ){
                 r.sendResponseHeaders(400, -1);
             }
             //actorID is given, then test for existence

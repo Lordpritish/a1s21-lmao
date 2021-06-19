@@ -39,7 +39,8 @@ public class hasRelationship {
 //            System.out.println("hasRelationhshi[ get input:");
 //            System.out.println(deserialized);
             //If actorID is not given return 400 as BAD REQUEST
-            if (!deserialized.has("actorID") || !deserialized.has("movieID")) {
+            if (!deserialized.has("actorID") || !deserialized.has("movieID") || !deserialized.get("actorID").getClass().equals(String.class)
+                    || !deserialized.get("movieID").getClass().equals(String.class) ) {
                 r.sendResponseHeaders(400, -1);
             }
             else {

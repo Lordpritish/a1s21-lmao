@@ -32,7 +32,8 @@ public class addActor {
             JSONObject deserialized = new JSONObject(body);
 //            System.out.println("here2");
             //If either name or actorID is not given return 400 as BAD REQUEST
-            if (!deserialized.has("name") || !deserialized.has("actorID")) {
+            if (!deserialized.has("name") || !deserialized.has("actorID")  || (!deserialized.get("actorID").getClass().equals(String.class))
+                    || !deserialized.get("name").getClass().equals(String.class)) {
 //                System.out.println("here3");
                 r.sendResponseHeaders(400, -1);
 
