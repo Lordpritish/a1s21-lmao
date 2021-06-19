@@ -1,23 +1,12 @@
 package ca.utoronto.utm.mcs;
 
 import java.io.IOException;
-import java.io.OutputStream;
-import java.util.Map;
 
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.neo4j.driver.Driver;
 
-import java.util.List;
-import org.neo4j.driver.Result;
-import org.neo4j.driver.Session;
-import org.neo4j.driver.Transaction;
-import org.neo4j.driver.TransactionWork;
-
-import static org.neo4j.driver.Values.parameters;
 
 import javax.inject.Inject;
 

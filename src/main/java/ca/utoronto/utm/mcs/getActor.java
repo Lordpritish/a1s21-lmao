@@ -27,8 +27,7 @@ public class getActor {
             JSONObject deserialized = new JSONObject(body);
 
             //See body and deserilized
-            System.out.println("addActor-HandelGet get input:");
-            System.out.println(deserialized);
+            System.out.println("GETActor-HandelGet get input:");
             //If actorID is not given return 400 as BAD REQUEST
             if (!deserialized.has("actorID")) {
                 r.sendResponseHeaders(400, -1);
