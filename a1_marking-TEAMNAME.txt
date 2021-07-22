@@ -4,7 +4,7 @@ CSCC01 Assignment 1 Marking Scheme
 Group Name: 
 
 # REST API Correctness (56%)
-9 / 45 - Passed test cases in automated testing file
+25 / 45 - Passed test cases in automated testing file
 
 # GIT FLOW (4%)
 3 / 3 - Correct git flow
@@ -29,4 +29,4 @@ Group Name:
 
 
 # Total
-35.5 / 80
+51.5 / 80
